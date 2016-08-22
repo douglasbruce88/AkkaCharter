@@ -1,7 +1,14 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
-
+﻿open System
+open System.Windows.Forms
+open FSharp.Charting
+ 
 [<EntryPoint>]
+[<STAThread>]
 let main argv = 
-    printfn "%A" argv
-    0 // return an integer exit code
+ 
+    Application.EnableVisualStyles()
+    Application.SetCompatibleTextRenderingDefault false
+ 
+    Application.Run (Chart.Line([ for x in 0 .. 10 -> x, x*x ]).ShowChart())
+ 
+    0

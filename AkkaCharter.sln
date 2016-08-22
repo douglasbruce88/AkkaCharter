@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter", "AkkaCharter.fsproj", "{C6420C31-6C5A-4050-A24B-5872A67FABFA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter.Data.Tests", "AkkaCharter.Data.Tests\AkkaCharter.Data.Tests.fsproj", "{B492D100-2AEB-40EA-8026-5B0FE0F85357}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter.Data", "AkkaCharter.Data\AkkaCharter.Data.fsproj", "{38954698-CB1C-4BA8-8052-06287644A2CC}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter", "AkkaCharter\AkkaCharter.fsproj", "{C6420C31-6C5A-4050-A24B-5872A67FABFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +15,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B492D100-2AEB-40EA-8026-5B0FE0F85357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B492D100-2AEB-40EA-8026-5B0FE0F85357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B492D100-2AEB-40EA-8026-5B0FE0F85357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B492D100-2AEB-40EA-8026-5B0FE0F85357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38954698-CB1C-4BA8-8052-06287644A2CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38954698-CB1C-4BA8-8052-06287644A2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38954698-CB1C-4BA8-8052-06287644A2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38954698-CB1C-4BA8-8052-06287644A2CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Release|Any CPU.ActiveCfg = Release|Any CPU

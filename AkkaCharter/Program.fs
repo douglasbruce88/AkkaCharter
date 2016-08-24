@@ -1,11 +1,8 @@
-﻿module Program
-
+﻿open AkkaCharter
 open System
 open System.Windows.Forms
-open AkkaCharter
 
-Application.EnableVisualStyles ()
+Application.EnableVisualStyles()
 Application.SetCompatibleTextRenderingDefault false
-
-[<STAThread>]    
-do Application.Run (Form.load())
+[<STAThread>]
+do Application.Run(Form.load())

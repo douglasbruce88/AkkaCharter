@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter.Data", "AkkaCha
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter", "AkkaCharter\AkkaCharter.fsproj", "{C6420C31-6C5A-4050-A24B-5872A67FABFA}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter.Tests", "AkkaCharter.Tests\AkkaCharter.Tests.fsproj", "{C8728816-D694-43E9-8AD8-435B84B222FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6420C31-6C5A-4050-A24B-5872A67FABFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8728816-D694-43E9-8AD8-435B84B222FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8728816-D694-43E9-8AD8-435B84B222FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8728816-D694-43E9-8AD8-435B84B222FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8728816-D694-43E9-8AD8-435B84B222FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

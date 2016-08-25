@@ -13,7 +13,7 @@ module Form =
     let controlPanel = new Panel(Location = new Point(800, 0), Size = new Size(200, 600), BorderStyle = BorderStyle.Fixed3D, Dock = DockStyle.Right)
     let items = [ "AAPL"; "GOOG"; "MSFT" ]
     
-    List.map (fun item -> listBox.Items.Add(item)) |> ignore
+    List.map (fun item -> listBox.Items.Add(item)) items |> ignore
     form.Controls.Add tickerPanel
     form.Controls.Add controlPanel
     controlPanel.Controls.Add btnRefresh
@@ -22,6 +22,8 @@ module Form =
     let system = System.create "ChartActors" (Configuration.load())
     let gatheringActor = spawn system "counters" (MyActors.gatheringActor tickerPanel form system)
     
-    btnRefresh.Click.Add(fun _ -> gatheringActor <! listBox.SelectedItems)
+    let listBoxAsArray (listBox: ListBox) = Array.ofList [for item in listBox.SelectedItems -> item.ToString()]
+    let ask = fun _ -> gatheringActor <! GetData(listBoxAsArray listBox)
+    btnRefresh.Click.Add(ask)
     
     let load() = form

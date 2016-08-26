@@ -40,29 +40,29 @@ module ActorsTests =
         let GetTimeP = GetTime list
 
          // Initial warmup
-        let s1 = GetTimeP Array.map
-        let p1 = GetTimeP Array.Parallel.map
+        GetTimeP Array.map |> ignore
+        GetTimeP Array.Parallel.map |> ignore
 
         // Repeats
-        let times = 2
+        let times = 10
 
-        let s = seq { for i in 1 .. times -> GetTimeP Array.map }
+        let s = seq { for _ in 1 .. times -> GetTimeP Array.map }
         let sTime = Seq.sum s / (int64 times)
         printf "Sequential time: %i \r\n" sTime
 
-        let p = seq { for i in 1 .. times -> GetTimeP Array.Parallel.map }
+        let p = seq { for _ in 1 .. times -> GetTimeP Array.Parallel.map }
         let pTime = Seq.sum p / (int64 times)
         printf "Parallel time: %i \r\n" pTime
 
         // Actors 
         
-        let sw = new System.Diagnostics.Stopwatch()
-        sw.Start()
-        let r = ask() 
-        //let response = Async.RunSynchronously r
-        sw.Stop()
+//        let sw = new System.Diagnostics.Stopwatch()
+//        sw.Start()
+//        let r = ask() 
+//        //let response = Async.RunSynchronously r
+//        sw.Stop()
 
-        printf "Actor time: %i \r\n" sw.ElapsedMilliseconds
+//        printf "Actor time: %i \r\n" sw.ElapsedMilliseconds
 
         sTime <=! pTime
 

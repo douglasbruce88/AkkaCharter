@@ -23,15 +23,16 @@ module MyActors =
     open System.Windows.Forms
     
     let tickerActor (ticker : string) (mailbox : Actor<_>) = 
-        let rec loop = 
+        let rec loop() = 
             actor { 
                 let! message = mailbox.Receive()
                 match message with
                 | GetDataBetweenDates(startDate, endDate) -> 
                     let stockData = StockData((ticker, getStockPrices ticker startDate endDate))
                     mailbox.Sender() <! stockData
+                    mailbox.Self <! (PoisonPill.Instance)
             }
-        loop
+        loop()
     
     let createChart startDate endDate ticker = 
         Chart.Line([ for row in getStockPrices ticker startDate endDate do
@@ -67,7 +68,7 @@ module MyActors =
                                              yield row.Date, row.Close ], Name = fst rows)) finalData
                     
                     let chartControl = new ChartControl(Chart.Combine(charts).WithLegend(), Dock = DockStyle.Fill, Name = "Tickers")
-                    if tickerPanel.Controls.ContainsKey("Tickers") then form.Controls.RemoveByKey("Tickers")
+                    if tickerPanel.Controls.ContainsKey("Tickers") then tickerPanel.Controls.RemoveByKey("Tickers")
                     tickerPanel.Controls.Add chartControl
                     return! waiting()
                 | StockData(tickerName, data) -> return! gettingData (numberOfResultsToSee - 1) ((tickerName, data) :: soFar)

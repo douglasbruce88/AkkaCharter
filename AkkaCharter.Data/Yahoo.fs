@@ -12,6 +12,6 @@ module Yahoo =
     
     let getStockPrices stock startDate endDate = 
         let fullUrl = url + stock + startDateString startDate + endDateString endDate
-        Stocks.Load(fullUrl).Rows
+        Stocks.Load(fullUrl).Rows // DOes this handle errors?
         |> Seq.toList
         |> List.rev

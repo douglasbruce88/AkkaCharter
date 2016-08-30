@@ -7,6 +7,7 @@ module Messages =
     
     type DrawChart = 
         | GetDataBetweenDates of StartDate : DateTime * EndDate : DateTime
+        | ClearCache
     
     type DataMessage = 
         | StockData of string * Stocks.Row list
@@ -33,16 +34,29 @@ module MyActors =
         tickerPanel.Controls.Add chartControl
     
     let tickerActor (ticker : string) (mailbox : Actor<_>) = 
-        let rec loop() = 
+        let rec doesNotHaveData() = 
             actor { 
                 let! message = mailbox.Receive()
                 match message with
                 | GetDataBetweenDates(startDate, endDate) -> 
                     let stockData = StockData((ticker, getStockPrices ticker startDate endDate))
                     mailbox.Sender() <! stockData
-                    mailbox.Self <! (PoisonPill.Instance)
+                    //mailbox.Self <! (PoisonPill.Instance)
+                    return! hasData (stockData)
+                | ClearCache -> return! doesNotHaveData()
             }
-        loop()
+        
+        and hasData (stockData : DataMessage) = 
+            actor { 
+                let! message = mailbox.Receive()
+                match message with
+                | GetDataBetweenDates(_) -> 
+                    mailbox.Sender() <! stockData
+                    return! hasData (stockData)
+                | ClearCache -> return! doesNotHaveData()
+            }
+        
+        doesNotHaveData()
     
     let createChart startDate endDate ticker = 
         Chart.Line([ for row in getStockPrices ticker startDate endDate do
@@ -51,23 +65,27 @@ module MyActors =
     let defaultChart = createChart (new DateTime(2014, 01, 01)) (new DateTime(2015, 01, 01))
     
     let gatheringActor (tickerPanel : System.Windows.Forms.Panel) (sw : System.Diagnostics.Stopwatch) (system : ActorSystem) (mailbox : Actor<_>) = 
-        let rec waiting() = 
+        let rec waiting (existingActorRefs : IActorRef Set) = 
             actor { 
                 let! message = mailbox.Receive()
                 match message with
                 | GetData d -> 
                     sw.Restart()
-                    let dataActorRefs = 
-                        [ for item in d do
+                    let existingNames = existingActorRefs |> Set.map (fun (x : IActorRef) -> x.Path.Name)
+                    let newActors = existingNames |> Set.difference (Set.ofArray d)
+                    
+                    let newActorRefs = 
+                        [ for item in newActors do
                               yield spawn system (item.ToString()) (tickerActor (item.ToString())) ]
                     
+                    let combinedActorRefs = existingActorRefs |> Set.union (Set.ofList newActorRefs)
                     let tell = fun dataActorRef -> dataActorRef <! (GetDataBetweenDates(new DateTime(2014, 01, 01), new DateTime(2015, 01, 01)))
-                    List.map tell dataActorRefs |> ignore
-                    return! gettingData (List.length dataActorRefs) []
-                | _ -> return! waiting()
+                    Set.map tell combinedActorRefs |> ignore
+                    return! gettingData (Set.count combinedActorRefs) combinedActorRefs []
+                | _ -> return! waiting (existingActorRefs)
             }
         
-        and gettingData (numberOfResultsToSee : int) (soFar : (string * Stocks.Row list) list) = 
+        and gettingData (numberOfResultsToSee : int) (existingActorRefs : IActorRef Set) (soFar : (string * Stocks.Row list) list) = 
             actor { 
                 let! message = mailbox.Receive()
                 match message with
@@ -76,12 +94,12 @@ module MyActors =
                     createCharts tickerPanel finalData
                     sw.Stop()
                     MessageBox.Show(sprintf "Retrieved data in %d ms" sw.ElapsedMilliseconds) |> ignore
-                    return! waiting()
-                | StockData(tickerName, data) -> return! gettingData (numberOfResultsToSee - 1) ((tickerName, data) :: soFar)
-                | _ -> return! waiting()
+                    return! waiting existingActorRefs
+                | StockData(tickerName, data) -> return! gettingData (numberOfResultsToSee - 1) existingActorRefs ((tickerName, data) :: soFar)
+                | _ -> return! waiting existingActorRefs
             }
         
-        waiting()
+        waiting (Set.empty)
     
     let pureGatheringActor (system : ActorSystem) (mailbox : Actor<_>) = 
         let rec waiting() = 
@@ -120,14 +138,12 @@ module MyActors =
     let getCharts (tickerPanel : System.Windows.Forms.Panel) mapfunction (list : string []) = 
         let sw = new System.Diagnostics.Stopwatch()
         sw.Start()
-
         let charts = mapfunction defaultChart list
         let chartControl = new ChartControl(Chart.Combine(charts).WithLegend(), Dock = DockStyle.Fill, Name = "Tickers")
         if tickerPanel.Controls.ContainsKey("Tickers") then tickerPanel.Controls.RemoveByKey("Tickers")
         tickerPanel.Controls.Add chartControl
-
         sw.Stop()
         MessageBox.Show(sprintf "Retrieved data in %d ms" sw.ElapsedMilliseconds) |> ignore
     
     let getChartsSync (tickerPanel : System.Windows.Forms.Panel) = getCharts tickerPanel Array.map
-    let getChartsTasks (tickerPanel : System.Windows.Forms.Panel)= getCharts tickerPanel Array.Parallel.map
+    let getChartsTasks (tickerPanel : System.Windows.Forms.Panel) = getCharts tickerPanel Array.Parallel.map

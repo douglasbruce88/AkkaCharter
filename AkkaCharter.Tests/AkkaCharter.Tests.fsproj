@@ -63,6 +63,14 @@
       <HintPath>..\packages\Akka.FSharp.1.1.1\lib\net45\Akka.FSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Akka.TestKit">
+      <HintPath>..\packages\Akka.TestKit.1.1.1\lib\net45\Akka.TestKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Akka.TestKit.NUnit3">
+      <HintPath>..\packages\Akka.TestKit.NUnit3.1.1.1\lib\net45\Akka.TestKit.NUnit3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FSharp.Charting">
       <HintPath>..\packages\FSharp.Charting.0.90.14\lib\net40\FSharp.Charting.dll</HintPath>
       <Private>True</Private>

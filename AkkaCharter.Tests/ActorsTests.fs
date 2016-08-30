@@ -9,6 +9,7 @@ module ActorsTests =
     open FSharp.Charting
     open AkkaCharter.Data.Yahoo
     open FSharp.Data
+    open Akka.TestKit
 
     let GetTime(list : string[]) mapfunction  =  
         let startDate = new DateTime(2014, 01 , 01)
@@ -22,6 +23,7 @@ module ActorsTests =
     [<Test>]
     let ``Test using sequential list, threads, and actors``() = 
         let system = System.create "ChartActors" (Configuration.load())
+
         let gatheringActor = spawn system "counters" (MyActors.pureGatheringActor system)
                 
         let list = [|"AAPL"

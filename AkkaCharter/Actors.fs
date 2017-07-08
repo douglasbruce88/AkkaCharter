@@ -2,7 +2,7 @@
 
 [<AutoOpen>]
 module Messages = 
-    open AkkaCharter.Data.Yahoo
+    open AkkaCharter.Data
     open System
     
     type DrawChart = 
@@ -17,7 +17,7 @@ module Messages =
 module MyActors = 
     open Akka.Actor
     open Akka.FSharp
-    open AkkaCharter.Data.Yahoo
+    open AkkaCharter.Data
     open FSharp.Charting
     open FSharp.Charting.ChartTypes
     open System

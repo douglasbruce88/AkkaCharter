@@ -53,6 +53,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="ActorsTests.fs" />
     <Content Include="packages.config" />
+    <Compile Include="DataTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Akka">
@@ -122,11 +123,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AkkaCharter.Data\AkkaCharter.Data.fsproj">
-      <Name>AkkaCharter.Data</Name>
-      <Project>{38954698-cb1c-4ba8-8052-06287644a2cc}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\AkkaCharter\AkkaCharter.fsproj">
       <Name>AkkaCharter</Name>
       <Project>{c6420c31-6c5a-4050-a24b-5872a67fabfa}</Project>

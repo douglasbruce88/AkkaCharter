@@ -6,7 +6,7 @@ module Form =
     open Akka.FSharp
     open System.Drawing
     open System.Windows.Forms
-    open AkkaCharter.Data.Yahoo
+    open AkkaCharter.Data
     
     let btnRunActors = new Button(Name = "btnRunActors", Text = "Run using Actors", Location = Point(20, 200), Size = Size(110, 41), TabIndex = 1, UseVisualStyleBackColor = true)
     let btnRunSync = new Button(Name = "btnRunSync", Text = "Run synchronously", Location = Point(20, 250), Size = Size(110, 41), TabIndex = 1, UseVisualStyleBackColor = true)

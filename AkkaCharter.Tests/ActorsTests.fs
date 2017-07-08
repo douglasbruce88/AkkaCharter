@@ -7,7 +7,7 @@ module ActorsTests =
     open Akka.FSharp
     open AkkaCharter
     open FSharp.Charting
-    open AkkaCharter.Data.Yahoo
+    open AkkaCharter.Data
     open FSharp.Data
     open Akka.TestKit
 
@@ -27,13 +27,13 @@ module ActorsTests =
         let gatheringActor = spawn system "counters" (MyActors.pureGatheringActor system)
                 
         let list = [|"AAPL"
-                     "ADR"
                      "AMZN"
                      "GOOG"
                      "HPQ"
                      "IBM"
                      "MSFT"
                      "NOK"
+                     "SNY"
                      "TWTR"
                      "TYO"|]
 

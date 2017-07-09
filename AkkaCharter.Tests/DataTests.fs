@@ -21,5 +21,7 @@ module DataTests =
     [<Test>]
     let ``Get Chart Prices works on MSFT``() = 
         let expected = new Stocks.Row(new DateTime(2014, 01, 02), 37.35, 37.4, 37.1, 37.16, 30643745L)
-        let actual = List.head (getStockPrices "MSFT" (new DateTime(2014, 01, 01)) (new DateTime(2015, 01, 01)))
+        let exchange = Exchanges.NASDAQ |> toString
+        let actual = 
+            List.head (getStockPrices exchange "MSFT" (new DateTime(2014, 01, 01)) (new DateTime(2015, 01, 01)))
         actual =! expected

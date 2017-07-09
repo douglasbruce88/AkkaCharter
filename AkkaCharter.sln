@@ -7,9 +7,9 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter", "AkkaCharter\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaCharter.Tests", "AkkaCharter.Tests\AkkaCharter.Tests.fsproj", "{C8728816-D694-43E9-8AD8-435B84B222FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FE58B70-D792-4610-B0EC-04A1CDBA3D31}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1FEB95A3-2B2E-4508-B96E-957C67B3B7B9}"
 	ProjectSection(SolutionItems) = preProject
-		Tickers\Yahoo Ticker Symbols - Jan 2016.xlsx = Tickers\Yahoo Ticker Symbols - Jan 2016.xlsx
+		Tickers\companylist.csv = Tickers\companylist.csv
 	EndProjectSection
 EndProject
 Global

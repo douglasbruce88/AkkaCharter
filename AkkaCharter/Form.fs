@@ -31,10 +31,11 @@ module Form =
         new Panel(Location = new Point(800, 0), Size = new Size(200, 600), BorderStyle = BorderStyle.Fixed3D, 
                   Dock = DockStyle.Right)
     
+    // TODO: configure number of tickers
     let items = 
         tickers
         |> Seq.map (fun x -> x.Symbol)
-        |> Seq.take 10
+        |> Seq.take 100
         |> Seq.toList
     
     List.map (fun item -> listBox.Items.Add(item)) items |> ignore

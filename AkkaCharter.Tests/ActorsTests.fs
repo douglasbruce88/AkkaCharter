@@ -22,6 +22,7 @@ module ActorsTests =
         sw.ElapsedMilliseconds
     
     [<Test>]
+    [<Timeout(240000)>]
     let ``Test using sequential list, threads, and actors``() = 
         let system = System.create "ChartActors" (Configuration.load())
         let gatheringActor = spawn system "counters" (MyActors.pureGatheringActor system)
@@ -29,7 +30,7 @@ module ActorsTests =
         let testData = 
             tickers
             |> Seq.map (fun x -> x.Symbol)
-            |> Seq.take 10
+            |> Seq.take 50
             |> Seq.toArray
         
         let ask = fun _ -> gatheringActor <? GetData(testData)

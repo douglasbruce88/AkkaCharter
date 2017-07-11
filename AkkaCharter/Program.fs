@@ -1,8 +1,9 @@
-﻿open AkkaCharter
+﻿open Akka.FSharp
+open AkkaCharter
 open System
 open System.Windows.Forms
 
-let system = Akka.FSharp.System.create "ChartActors" (Akka.FSharp.Configuration.load())
+let system = System.create "ChartActors" (Configuration.load())
 
 Application.EnableVisualStyles()
 Application.SetCompatibleTextRenderingDefault false

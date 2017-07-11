@@ -43,6 +43,7 @@ module MyActors =
                     let exchange = Exchanges.NASDAQ |> toString
                     let stockData = 
                         StockData((ticker, getStockPrices exchange ticker startDate endDate))
+                    // TODO:switch for caching
                     mailbox.Sender() <! stockData
                     //mailbox.Self <! (PoisonPill.Instance)
                     return! hasData (stockData)
@@ -83,6 +84,7 @@ module MyActors =
                               yield spawn system (item.ToString()) (tickerActor (item.ToString())) ]
                     
                     let combinedActorRefs = existingActorRefs |> Set.union (Set.ofList newActorRefs)
+                    // TODO: configurable start/end dates
                     let tell = 
                         fun dataActorRef -> 
                             dataActorRef 

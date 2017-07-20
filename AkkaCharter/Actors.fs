@@ -21,8 +21,8 @@ module MyActors =
     open FSharp.Charting
     open FSharp.Charting.ChartTypes
     open System
-    open System.Windows.Forms
     open System.Diagnostics
+    open System.Windows.Forms
     
     let createCharts (tickerPanel : System.Windows.Forms.Panel) finalData = 
         let charts = 
@@ -41,12 +41,10 @@ module MyActors =
                 match message with
                 | GetDataBetweenDates(startDate, endDate) -> 
                     let exchange = Exchanges.NASDAQ |> toString
-                    let stockData = 
-                        StockData((ticker, getStockPrices exchange ticker startDate endDate))
-                    // TODO:switch for caching
+                    let stockData = StockData((ticker, getStockPrices exchange ticker startDate endDate))
+                    // TODO: switch for caching
                     mailbox.Sender() <! stockData
-                    //mailbox.Self <! (PoisonPill.Instance)
-                    return! hasData (stockData)
+                    return! doesNotHaveData() // hasData(stockData)
                 | ClearCache -> return! doesNotHaveData()
             }
         
@@ -61,12 +59,6 @@ module MyActors =
             }
         
         doesNotHaveData()
-    
-    let createChart startDate endDate ticker = 
-        Chart.Line([ for row in getStockPrices (Exchanges.NASDAQ |> toString) ticker startDate endDate do
-                         yield row.Date, row.Close ], Name = ticker)
-    
-    let defaultChart = createChart (new DateTime(2014, 01, 01)) (new DateTime(2015, 01, 01))
     
     let gatheringActor (tickerPanel : System.Windows.Forms.Panel) (sw : System.Diagnostics.Stopwatch) 
         (system : ActorSystem) (mailbox : Actor<_>) = 
@@ -112,7 +104,50 @@ module MyActors =
         
         waiting (Set.empty)
     
-    let pureGatheringActor (system : ActorSystem) (mailbox : Actor<_>) = 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let testActor (system : ActorSystem) (mailbox : Actor<_>) = 
         let rec waiting() = 
             actor { 
                 let! message = mailbox.Receive()
@@ -149,16 +184,3 @@ module MyActors =
             }
         
         waiting()
-    
-    let getCharts (tickerPanel : System.Windows.Forms.Panel) mapfunction (list : string []) = 
-        let sw = new Stopwatch()
-        sw.Start()
-        let charts = mapfunction defaultChart list
-        let chartControl = new ChartControl(Chart.Combine(charts).WithLegend(), Dock = DockStyle.Fill, Name = "Tickers")
-        if tickerPanel.Controls.ContainsKey("Tickers") then tickerPanel.Controls.RemoveByKey("Tickers")
-        tickerPanel.Controls.Add chartControl
-        sw.Stop()
-        MessageBox.Show(sprintf "Retrieved data in %d ms" sw.ElapsedMilliseconds) |> ignore
-    
-    let getChartsSync (tickerPanel : System.Windows.Forms.Panel) = getCharts tickerPanel Array.map
-    let getChartsTasks (tickerPanel : System.Windows.Forms.Panel) = getCharts tickerPanel Array.Parallel.map

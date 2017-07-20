@@ -46,7 +46,7 @@ module Form =
     controlPanel.Controls.Add btnRunTasks
     controlPanel.Controls.Add listBox
     
-    let load (system : ActorSystem) = 
+    let load () = 
         let sw = new Stopwatch()
         let gatheringActor = spawn system "counters" (MyActors.gatheringActor tickerPanel sw system)
         
@@ -55,8 +55,8 @@ module Form =
         
         let ask = fun _ -> gatheringActor <! GetData(listBoxAsArray listBox)
         btnRunActors.Click.Add(ask)
-        let getChartsSync = fun _ -> MyActors.getChartsSync tickerPanel (listBoxAsArray listBox)
+        let getChartsSync = fun _ -> SyncAndAsync.getChartsSync tickerPanel (listBoxAsArray listBox)
         btnRunSync.Click.Add(getChartsSync)
-        let getChartsTasks = fun _ -> MyActors.getChartsTasks tickerPanel (listBoxAsArray listBox)
+        let getChartsTasks = fun _ -> SyncAndAsync.getChartsTasks tickerPanel (listBoxAsArray listBox)
         btnRunTasks.Click.Add(getChartsTasks)
         form

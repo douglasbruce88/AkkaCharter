@@ -58,6 +58,8 @@
     <None Include="App.config" />
     <Content Include="packages.config" />
     <Compile Include="Data.fs" />
+    <Compile Include="ActorSystemRefs.fs" />
+    <Compile Include="SyncAndAsync.fs" />
     <Compile Include="Actors.fs" />
     <Compile Include="Form.fs" />
     <Compile Include="Program.fs" />

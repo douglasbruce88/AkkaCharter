@@ -25,12 +25,13 @@ module ActorsTests =
     [<Timeout(240000)>]
     let ``Test using sequential list, threads, and actors``() = 
         let system = System.create "ChartActors" (Configuration.load())
-        let gatheringActor = spawn system "counters" (MyActors.pureGatheringActor system)
+        let gatheringActor = spawn system "counters" (MyActors.testActor system)
         
         let testData = 
             tickers
             |> Seq.map (fun x -> x.Symbol)
-            |> Seq.take 50
+            |> Seq.skip (Seq.length tickers - 200)
+            |> Seq.take 200
             |> Seq.toArray
         
         let ask = fun _ -> gatheringActor <? GetData(testData)
@@ -39,7 +40,7 @@ module ActorsTests =
         GetTimeP Array.map |> ignore
         GetTimeP Array.Parallel.map |> ignore
         // Repeats
-        let times = 10
+        let times = 1
         
         let s = 
             seq { 

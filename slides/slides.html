@@ -40,50 +40,207 @@ class: center, middle
 
 ---
 
+# Intro
+
+- Who am I?
+
+- Who are you?
+
+---
+
+# Plan for this evening
+
+- What problems are we looking to solve?
+
+- What will we learn?
+
+- Introduction to concepts and frameworks
+
+- Demo and code
+
+---
+
+# What problems are we trying to solve?
+
+1. Concurrent web requests
+
+ - Examples: price comparison sites; hotel booking platforms; social networks; blog rolls; etc.
+
+ - Actors as concurrency unit: pros/cons?
+
+2. Integration of actor systems into 'normal' apps
+
+  - Actors from the bottom-up, not top-down
+
+  - Use in WinForms/ASP.NET
+
+---
+
 # What will we learn today?
 
-1. Introduction
-2. Deep-dive
-3. ...
+1. What options we have for concurrency in .NET 
+
+2. A bit about the good & bad of Akka.NET
+
+3. How to change one small part of a WinForms app to use the actor model
 
 ---
 
-# What's the problem?
+# Concurrency primitives in .NET
 
-Concurrent web requests
+VERY briefly:
 
----
+- Threads: actual OS thread with own resources, costly and easy to get wrong.
 
-# Concurrency primitives
+- Tasks: way to execute a request on 'a thread' and get a promise of the result
 
-1. Threads
-2. Tasks
-3. Actors
+- Actors: fire-and-forget exeuction, you'll get a message when the result comes back
 
 ---
 
-# Akka.NET
+# Introduction to Akka.NET and the Actor Model
 
-Port of JVM library
+- Actor Model: objects passing messages between themselves, 'pure OO'
+
+- Akka.NET: open-source port of JVM implementation
+
+  - Actors have mailboxes, process one immutable message at a time
+  
+  - Very lightweight implementation (~1kb vs ~1mb for a Thread)
+
+  - Resiliant and fault tolerant (supervision hierarchies http://getakka.net/docs/concepts/supervision)
+
+  - Scalable and distributed (Akka.Cluster http://getakka.net/docs/clustering/cluster-overview, Akka.Remote http://getakka.net/docs/Remoting)
 
 ---
 
-# The 'usual' approach
+# The 'usual' approach with Actors
 
-- Everything is an actor
+- Everything is an actor: 
+
+  - the whole system is built on actors
+
+  - difficult to rewrite one part to use the concept
+
+  - reasonably high barrier to entry to those unfamiliar
+
+  - similar to 'async all the way down'
+
+---
+
+# To the issue at hand!
+
+We want to take a 'standard' app (WinForms/ASP.NET) and make it handle concurrent web requests.
+
+It should be fast, scalable, and changes should have a small surface area
+
+---
+
+# Our example
+
+Based on Yahoo Finance app from http://fsharp.github.io/FSharp.Data/library/CsvProvider.html.
+
+- Google, not Yahoo
+
+- Get lots of stock prices at once
+
+- 'Live' potential, easy refresh
+
+Compare Sync, Async (tasks), Actors (with Akka.NET)
 
 ---
 
 # The app
 
-_ Let's see some code! _
+_ Let's see a demo! _
+
+---
+
+# The app
+
+- Actors are lazy so first request is slower
+
+- After that, still abit slower than tasks
+
+- So why do we use it?
+
+  - Scalability: little effort to add Akka.Cluster, Akka.Remote
+
+  - Fault tolerance
+
+  - Ease of caching (will see later!) / keep-alive (lightweight)
+  
+  - Actors can have behaviour (Tasks have callbacks, not as nice)
+
+---
+
+# To the code!
+
+---
+
+# Code in a nutshell
+
+Sync: for each item selected, get the chart for it (using Array.map to iterate)
+
+Async: only one word change from Sync (Array.Parallel.map)
+
+Actors: 
+
+- System is maintained via a static reference, surface area = button click handler
+
+- One actor to 'manage' the requests, 
+   - keeps track of 'children' (inc. creation)
+   - knows when all requests have finished
+
+- One actor per stock, gets data for just that stock then tells the manager
+  - These can cache results if required
+  - Can also be killed off or kept around
+
+- Overall, slightly complex but still <100 LOC
+
 
 ---
 
 # Initial thoughts
 
-- Creating actors is expensive (cache them!)
-- GC
+- What do you think?
+
+- My thoughts:
+
+  - Adds complexity over Tasks but not dreadful
+
+  - Power of Akka.NET worth it for large apps (scaling, caching etc.)
+
+
+---
+
+# Next Steps
+
+Add scalability using Akka.Remote & Akka.Cluster
+
+Fault tolerance using better supervision strategies (http://getakka.net/docs/concepts/supervision)
+
+Speed test: proper benchmarking vs Tasks
+
+---
+
+# Conclusion
+
+Actor model suitable for (complex) concurrent web requests
+
+Akka.NET is well developed with a good F# API. 
+
+We can integrate Akka.NET into a WinForms/ASP.NET app with a small surface area
+
+Complexity is still there vs. Tasks so not for all uses!
+
+---
+
+class: center, middle
+
+# Questions please! #
+
+#### _Thanks for coming!!_
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
